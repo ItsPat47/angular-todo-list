@@ -6,7 +6,7 @@ import { NgForm } from "@angular/forms";
 
 ////Store
 import { Store, select } from "@ngrx/store";
-import { increment, saveItemToStore } from "../reducers/Items/items.action";
+import { saveItemToStore } from "../reducers/Items/items.action";
 
 @Component({
   selector: "app-post-list",
@@ -14,32 +14,28 @@ import { increment, saveItemToStore } from "../reducers/Items/items.action";
   styleUrls: ["./post-list.component.scss"]
 })
 export class PostListComponent implements OnInit {
-  stateText$: Observable<number>;
-
-  stateArray$: Observable<any[]>;
-  // mockList = [
-  //   { label: "buy car", done: false },
-  //   { label: "get milk", done: false },
-  //   { label: "get cookie", done: false }
-  // ];
+  reduxArray$: Observable<any[]>;
   items: Item[];
   itemsSubscription: Subscription;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     private itemService: ItemService,
     private store: Store,
     private storeNum: Store<{ count: number }>,
-    private testArray: Store<{ testArray: Array<any[]> }>
+    private reduxStoreItem: Store<{ reduxStoreItem: Array<any[]> }>
   ) {
-    this.stateText$ = storeNum.pipe(select("count"));
-    this.stateArray$ = testArray.pipe(select("testArray"));
+    this.reduxArray$ = reduxStoreItem.pipe(select("reduxStoreItem"));
   }
 
   ngOnInit() {
+    console.log("init loading", this.isLoading);
     this.itemsSubscription = this.itemService.itemsSubject.subscribe(
-      (items: Item[]) => {
-        this.items = items;
+      (responseItems: Item[]) => {
+        this.items = responseItems;
+        console.log("init", responseItems);
+        this.store.dispatch(saveItemToStore({ items: responseItems }));
+        this.isLoading = false;
       }
     );
     this.itemService.emitItemsSubject();
@@ -49,25 +45,22 @@ export class PostListComponent implements OnInit {
   addItem(task: string): void {
     console.log("task added", task);
     this.itemService.addItem(task);
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   deleteItem(item: Item) {
     console.log("delete", item);
     this.items = this.items.filter(h => h !== item);
-    this.itemService.deleteItemsFromServer(item);
+    this.itemService.deleteItem(item);
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   saveitemsToServer() {
     this.itemService.saveItemsToServer();
   }
 
-  fetchItemsFromServer() {
+  getItemsFromServer() {
     this.itemService.getItemsFromServer();
-  }
-
-  increment() {
-    this.storeNum.dispatch(increment());
-    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   finishTask(item: Item) {}

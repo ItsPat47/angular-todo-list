@@ -52,7 +52,6 @@ export class ItemService {
         console.log("data from server", response);
         this.items = response;
         this.emitItemsSubject();
-        // this.store.dispatch(saveItemToStore({ items: response }));
       },
       error => {
         console.log("error getItems" + error);
@@ -60,7 +59,7 @@ export class ItemService {
     );
   }
 
-  deleteItemsFromServer(item: Item) {
+  deleteItem(item: Item) {
     console.log("item to remove from server", item);
     const itemIndexToRemove = this.items.findIndex(bookEl => {
       if (bookEl === item) {
@@ -68,7 +67,6 @@ export class ItemService {
       }
     });
     this.items.splice(itemIndexToRemove, 1);
-
-    console.log("removed from server");
+    console.log("removed from list");
   }
 }

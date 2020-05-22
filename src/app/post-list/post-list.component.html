@@ -1,27 +1,27 @@
-<!-- <ul class="itemsList">
-  <li *ngFor="let mockItem of mockList">
-    <span>{{ mockItem.label }}</span>
-    <button
-      class="btn btn-danger"
-      title="delete item"
-      (click)="deleteItem(item)"
+<div *ngIf="isLoading; then isLoadingTrue; else isLoadingFalse"></div>
+<ng-template #isLoadingTrue>
+  <div class="spinner-border text-primary bg-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</ng-template>
+<ng-template #isLoadingFalse>
+  <ul class="list-group bg-primary ">
+    <li
+      *ngFor="let itemTest of reduxArray$ | async; let i = index"
+      class="d-flex flex-row col-6"
     >
-      X
-    </button>
-  </li>
-</ul> -->
-<ul class="list-group  ">
-  <li *ngFor="let item of items; let i = index" class="d-flex flex-row ">
-    <div (click)="finishTask(i)" class="list-group-item  col">
-      <span>
-        {{ item.task }}
-      </span>
-    </div>
-    <button title="delete task" (click)="deleteItem(item)" class="btn">
-      X
-    </button>
-  </li>
-</ul>
+      <div (click)="finishTask(i)" class="list-group-item  col">
+        <span>
+          {{ itemTest.task }}
+        </span>
+      </div>
+      <button title="delete task" (click)="deleteItem(itemTest)" class="btn">
+        X
+      </button>
+    </li>
+  </ul></ng-template
+>
+
 <div>
   <label
     >New task:
@@ -31,16 +31,11 @@
     class="btn btn-success"
     (click)="addItem(itemLabel.value); itemLabel.value = ''"
   >
-    add
+    add task
   </button>
 
-  <button (click)="fetchItemsFromServer()">get appareil from server</button>
-  <button (click)="increment()">test redux</button>
+  <button (click)="getItemsFromServer()">init change</button>
 </div>
-<button class="btn btn-primary" (click)="saveitemsToServer()">Save list</button>
-<div>
-  <p>hello {{ stateText$ | async }}</p>
-</div>
-<li *ngFor="let itemTest of stateArray$ | async">
-  <span>{{ itemTest.task }}</span>
-</li>
+<button class="btn btn-primary" (click)="saveitemsToServer()">
+  Save list to the dataBase
+</button>

@@ -10,10 +10,7 @@ import { ItemService } from "./services/item.service";
 import { HttpClientModule } from "@angular/common/http";
 
 ///NGRX
-import {
-  changeStateTestReducer,
-  stateItemsReducer
-} from "./reducers/Items/items.reducer";
+import { stateItemsReducer } from "./reducers/Items/items.reducer";
 import { StoreModule } from "@ngrx/store";
 @NgModule({
   declarations: [AppComponent, PostListComponent, PostItemComponent],
@@ -22,8 +19,7 @@ import { StoreModule } from "@ngrx/store";
     AppRoutingModule,
     HttpClientModule,
     StoreModule.forRoot({
-      count: changeStateTestReducer,
-      testArray: stateItemsReducer
+      reduxStoreItem: stateItemsReducer
     })
   ],
   providers: [ItemService],
