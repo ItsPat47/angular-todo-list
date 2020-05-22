@@ -8,9 +8,24 @@ import { PostItemComponent } from "./post-item/post-item.component";
 import { ItemService } from "./services/item.service";
 
 import { HttpClientModule } from "@angular/common/http";
+
+///NGRX
+import {
+  changeStateTestReducer,
+  stateItemsReducer
+} from "./reducers/Items/items.reducer";
+import { StoreModule } from "@ngrx/store";
 @NgModule({
   declarations: [AppComponent, PostListComponent, PostItemComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    StoreModule.forRoot({
+      count: changeStateTestReducer,
+      testArray: stateItemsReducer
+    })
+  ],
   providers: [ItemService],
   bootstrap: [AppComponent]
 })

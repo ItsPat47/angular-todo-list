@@ -35,6 +35,12 @@
   </button>
 
   <button (click)="fetchItemsFromServer()">get appareil from server</button>
-  <button (click)="checkItemState()">check Item State</button>
+  <button (click)="increment()">test redux</button>
 </div>
 <button class="btn btn-primary" (click)="saveitemsToServer()">Save list</button>
+<div>
+  <p>hello {{ stateText$ | async }}</p>
+</div>
+<li *ngFor="let itemTest of stateArray$ | async">
+  <span>{{ itemTest.task }}</span>
+</li>

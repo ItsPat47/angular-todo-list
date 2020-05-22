@@ -1,8 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { ItemService } from "../services/item.service";
 import { Item } from "../models/item.model";
-import { Subscription } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { NgForm } from "@angular/forms";
+
+////Store
+import { Store, select } from "@ngrx/store";
+import { increment, saveItemToStore } from "../reducers/Items/items.action";
 
 @Component({
   selector: "app-post-list",
@@ -10,6 +14,9 @@ import { NgForm } from "@angular/forms";
   styleUrls: ["./post-list.component.scss"]
 })
 export class PostListComponent implements OnInit {
+  stateText$: Observable<number>;
+
+  stateArray$: Observable<any[]>;
   // mockList = [
   //   { label: "buy car", done: false },
   //   { label: "get milk", done: false },
@@ -19,7 +26,15 @@ export class PostListComponent implements OnInit {
   itemsSubscription: Subscription;
   isLoading: boolean = false;
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private itemService: ItemService,
+    private store: Store,
+    private storeNum: Store<{ count: number }>,
+    private testArray: Store<{ testArray: Array<any[]> }>
+  ) {
+    this.stateText$ = storeNum.pipe(select("count"));
+    this.stateArray$ = testArray.pipe(select("testArray"));
+  }
 
   ngOnInit() {
     this.itemsSubscription = this.itemService.itemsSubject.subscribe(
@@ -32,7 +47,7 @@ export class PostListComponent implements OnInit {
   }
 
   addItem(task: string): void {
-    console.log(task);
+    console.log("task added", task);
     this.itemService.addItem(task);
   }
 
@@ -50,8 +65,9 @@ export class PostListComponent implements OnInit {
     this.itemService.getItemsFromServer();
   }
 
-  checkItemState() {
-    console.log(this.items);
+  increment() {
+    this.storeNum.dispatch(increment());
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   finishTask(item: Item) {}

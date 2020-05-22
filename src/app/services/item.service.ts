@@ -3,13 +3,18 @@ import { Item } from "../models/item.model";
 import { Observable } from "rxjs";
 import { Subject } from "rxjs/";
 import { HttpClient } from "@angular/common/http";
+import { Store } from "@ngrx/store";
+
+import { saveItemToStore } from "../reducers/Items/items.action";
 @Injectable({
   providedIn: "root"
 })
 export class ItemService {
+  baseUrl: string = "https://angular-todo-list-e9fb8.firebaseio.com/.json";
+
   itemsSubject = new Subject<Item[]>();
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private store: Store) {}
 
   private items = [];
 
@@ -21,7 +26,7 @@ export class ItemService {
   }
 
   addItem(task: string) {
-    const itemObject = {
+    const itemObject: Item = {
       task: "",
       done: false
     };
@@ -31,30 +36,28 @@ export class ItemService {
   }
 
   saveItemsToServer() {
-    this.httpClient
-      .put("https://angular-todo-list-e9fb8.firebaseio.com/.json", this.items)
-      .subscribe(
-        () => {
-          console.log("Items saved to the server");
-        },
-        error => {
-          console.log("error when saving Items" + error);
-        }
-      );
+    this.httpClient.put(this.baseUrl, this.items).subscribe(
+      () => {
+        console.log("Items saved to the server");
+      },
+      error => {
+        console.log("error when saving Items" + error);
+      }
+    );
   }
+
   getItemsFromServer() {
-    this.httpClient
-      .get<Item[]>("https://angular-todo-list-e9fb8.firebaseio.com/.json")
-      .subscribe(
-        response => {
-          console.log(response);
-          this.items = response;
-          this.emitItemsSubject();
-        },
-        error => {
-          console.log("error getItems" + error);
-        }
-      );
+    this.httpClient.get<Item[]>(this.baseUrl).subscribe(
+      response => {
+        console.log("data from server", response);
+        this.items = response;
+        this.emitItemsSubject();
+        // this.store.dispatch(saveItemToStore({ items: response }));
+      },
+      error => {
+        console.log("error getItems" + error);
+      }
+    );
   }
 
   deleteItemsFromServer(item: Item) {
@@ -65,8 +68,7 @@ export class ItemService {
       }
     });
     this.items.splice(itemIndexToRemove, 1);
-    this.saveItemsToServer();
-    this.emitItemsSubject();
+
     console.log("removed from server");
   }
 }
