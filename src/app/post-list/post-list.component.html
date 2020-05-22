@@ -5,27 +5,30 @@
   </div>
 </ng-template>
 <ng-template #isLoadingFalse>
-  <ul class="list-group bg-primary ">
+  <ul class="list-group">
     <li
       *ngFor="let itemTest of reduxArray$ | async; let i = index"
-      class="d-flex flex-row col-6"
+      class="d-flex flex-row col-8 mx-auto"
     >
       <div (click)="finishTask(i)" class="list-group-item  col">
         <span>
           {{ itemTest.task }}
         </span>
       </div>
-      <button title="delete task" (click)="deleteItem(itemTest)" class="btn">
+      <button
+        title="delete task"
+        (click)="deleteItem(itemTest)"
+        class="btn bg-danger text-white"
+      >
         X
       </button>
     </li>
-  </ul></ng-template
->
+  </ul>
+</ng-template>
 
-<div>
-  <label
-    >New task:
-    <input #itemLabel />
+<div class="d-flex flex-row col-8  mx-auto bg-primary ">
+  <label>
+    <input #itemLabel placeholder="new task label" />
   </label>
   <button
     class="btn btn-success"
@@ -34,7 +37,7 @@
     add task
   </button>
 
-  <button (click)="getItemsFromServer()">init change</button>
+  <button (click)="getItemsFromServer()">reset change</button>
 </div>
 <button class="btn btn-primary" (click)="saveitemsToServer()">
   Save list to the dataBase

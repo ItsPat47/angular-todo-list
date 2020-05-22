@@ -16,9 +16,13 @@ export class ItemService {
 
   constructor(private httpClient: HttpClient, private store: Store) {}
 
-  private items = [];
+  private items: Item[] = [];
 
   emitItemsSubject() {
+    if (this.items === null) {
+      this.items = [];
+      this.itemsSubject.next(this.items.slice());
+    }
     this.itemsSubject.next(this.items.slice());
   }
   switchTaskDone(i: number) {
