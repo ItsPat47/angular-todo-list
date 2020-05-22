@@ -26,19 +26,31 @@
   </ul>
 </ng-template>
 
-<div class="d-flex flex-row col-8  mx-auto bg-primary ">
-  <label>
-    <input #itemLabel placeholder="new task label" />
+<div class="d-flex flex-row col-8  mx-auto  " style="margin-top: 10px">
+  <label style="width:100%">
+    <input #itemLabel placeholder="new task label" style="width: 100%; " />
   </label>
   <button
     class="btn btn-success"
+    style="width: 100px; margin-left: 5px "
     (click)="addItem(itemLabel.value); itemLabel.value = ''"
   >
     add task
   </button>
-
-  <button (click)="getItemsFromServer()">reset change</button>
 </div>
-<button class="btn btn-primary" (click)="saveitemsToServer()">
-  Save list to the dataBase
-</button>
+
+<div
+  class=" mx-auto d-flex justify-content-center"
+  style="width: 600px; margin-top: 20px"
+>
+  <button class="btn btn-secondary" (click)="getItemsFromServer()">
+    reset change
+  </button>
+  <button
+    class="btn btn-primary "
+    (click)="saveitemsToServer()"
+    style="width: 300px; margin-left: 5px"
+  >
+    Save list to the dataBase
+  </button>
+</div>

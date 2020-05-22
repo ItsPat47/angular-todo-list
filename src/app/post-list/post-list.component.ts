@@ -22,18 +22,16 @@ export class PostListComponent implements OnInit {
   constructor(
     private itemService: ItemService,
     private store: Store,
-    private storeNum: Store<{ count: number }>,
     private reduxStoreItem: Store<{ reduxStoreItem: Array<any[]> }>
   ) {
     this.reduxArray$ = reduxStoreItem.pipe(select("reduxStoreItem"));
   }
 
   ngOnInit() {
-    console.log("init loading", this.isLoading);
     this.itemsSubscription = this.itemService.itemsSubject.subscribe(
       (responseItems: Item[]) => {
         this.items = responseItems;
-        console.log("init", responseItems);
+
         this.store.dispatch(saveItemToStore({ items: responseItems }));
         this.isLoading = false;
       }
@@ -43,13 +41,11 @@ export class PostListComponent implements OnInit {
   }
 
   addItem(task: string): void {
-    console.log("task added", task);
     this.itemService.addItem(task);
     this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   deleteItem(item: Item) {
-    console.log("delete", item);
     this.items = this.items.filter(h => h !== item);
     this.itemService.deleteItem(item);
     this.store.dispatch(saveItemToStore({ items: this.items }));

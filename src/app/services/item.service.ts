@@ -53,7 +53,6 @@ export class ItemService {
   getItemsFromServer() {
     this.httpClient.get<Item[]>(this.baseUrl).subscribe(
       response => {
-        console.log("data from server", response);
         this.items = response;
         this.emitItemsSubject();
       },
@@ -64,13 +63,11 @@ export class ItemService {
   }
 
   deleteItem(item: Item) {
-    console.log("item to remove from server", item);
     const itemIndexToRemove = this.items.findIndex(bookEl => {
       if (bookEl === item) {
         return true;
       }
     });
     this.items.splice(itemIndexToRemove, 1);
-    console.log("removed from list");
   }
 }
