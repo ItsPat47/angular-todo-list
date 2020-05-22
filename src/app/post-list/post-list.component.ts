@@ -59,5 +59,7 @@ export class PostListComponent implements OnInit {
     this.itemService.getItemsFromServer();
   }
 
-  finishTask(item: Item) {}
+  updateTaskDone(index) {
+    this.itemService.updateTaskDone(index);
+  }
 }

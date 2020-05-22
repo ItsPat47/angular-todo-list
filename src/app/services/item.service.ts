@@ -25,9 +25,6 @@ export class ItemService {
     }
     this.itemsSubject.next(this.items.slice());
   }
-  switchTaskDone(i: number) {
-    this.items[i].done = !this.items[i].done;
-  }
 
   addItem(task: string) {
     const itemObject: Item = {
@@ -69,5 +66,9 @@ export class ItemService {
       }
     });
     this.items.splice(itemIndexToRemove, 1);
+  }
+
+  updateTaskDone(index) {
+    this.items[index].done = this.items[index].done;
   }
 }
