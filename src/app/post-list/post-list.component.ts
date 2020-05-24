@@ -14,8 +14,8 @@ import { saveItemToStore } from "../reducers/Items/items.action";
   styleUrls: ["./post-list.component.scss"]
 })
 export class PostListComponent implements OnInit {
-  reduxArray$: Observable<any[]>;
   items: Item[];
+  reduxArray$: Observable<any[]>;
   itemsSubscription: Subscription;
   isLoading: boolean = true;
 
@@ -31,6 +31,7 @@ export class PostListComponent implements OnInit {
     this.itemService.getItemsFromServer();
     this.itemsSubscription = this.itemService.itemsSubject.subscribe(
       (responseItems: Item[]) => {
+        this.items = responseItems;
         this.store.dispatch(saveItemToStore({ items: responseItems }));
         this.isLoading = false;
       }
@@ -40,6 +41,7 @@ export class PostListComponent implements OnInit {
   addItem(task: string) {
     if (task !== "") {
       this.itemService.addItem(task);
+      this.store.dispatch(saveItemToStore({ items: this.items }));
     } else {
       return;
     }
@@ -47,6 +49,7 @@ export class PostListComponent implements OnInit {
 
   deleteItem(item: Item) {
     this.itemService.deleteItem(item);
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   saveitemsToServer() {

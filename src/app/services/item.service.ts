@@ -33,7 +33,6 @@ export class ItemService {
     itemObject.task = task;
     this.items.push(itemObject);
     this.emitItemsSubject();
-    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   saveItemsToServer() {
@@ -67,6 +66,5 @@ export class ItemService {
     });
     this.items.splice(itemIndexToRemove, 1);
     this.emitItemsSubject();
-    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 }
