@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { Subject } from "rxjs/";
 import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
-
 import { saveItemToStore } from "../reducers/Items/items.action";
 @Injectable({
   providedIn: "root"
@@ -34,6 +33,7 @@ export class ItemService {
     itemObject.task = task;
     this.items.push(itemObject);
     this.emitItemsSubject();
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   saveItemsToServer() {
@@ -66,9 +66,7 @@ export class ItemService {
       }
     });
     this.items.splice(itemIndexToRemove, 1);
-  }
-
-  updateTaskDone(index) {
-    this.items[index].done = this.items[index].done;
+    this.emitItemsSubject();
+    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 }

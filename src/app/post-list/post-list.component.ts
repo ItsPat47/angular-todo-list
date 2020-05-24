@@ -22,33 +22,31 @@ export class PostListComponent implements OnInit {
   constructor(
     private itemService: ItemService,
     private store: Store,
-    private reduxStoreItem: Store<{ reduxStoreItem: Array<any[]> }>
+    private reduxStoreItem: Store<{ reduxStoreItem: Array<Item[]> }>
   ) {
     this.reduxArray$ = reduxStoreItem.pipe(select("reduxStoreItem"));
   }
 
   ngOnInit() {
+    this.itemService.getItemsFromServer();
     this.itemsSubscription = this.itemService.itemsSubject.subscribe(
       (responseItems: Item[]) => {
-        this.items = responseItems;
-
         this.store.dispatch(saveItemToStore({ items: responseItems }));
         this.isLoading = false;
       }
     );
-    this.itemService.emitItemsSubject();
-    this.itemService.getItemsFromServer();
   }
 
-  addItem(task: string): void {
-    this.itemService.addItem(task);
-    this.store.dispatch(saveItemToStore({ items: this.items }));
+  addItem(task: string) {
+    if (task !== "") {
+      this.itemService.addItem(task);
+    } else {
+      return;
+    }
   }
 
   deleteItem(item: Item) {
-    this.items = this.items.filter(h => h !== item);
     this.itemService.deleteItem(item);
-    this.store.dispatch(saveItemToStore({ items: this.items }));
   }
 
   saveitemsToServer() {
@@ -57,9 +55,5 @@ export class PostListComponent implements OnInit {
 
   getItemsFromServer() {
     this.itemService.getItemsFromServer();
-  }
-
-  updateTaskDone(index) {
-    this.itemService.updateTaskDone(index);
   }
 }

@@ -1,6 +1,9 @@
 <div *ngIf="isLoading; then isLoadingTrue; else isLoadingFalse"></div>
 <ng-template #isLoadingTrue>
-  <div class="spinner-border text-primary bg-primary" role="status">
+  <div
+    class="spinner-border text-primary d-flex flex-row  mx-auto"
+    role="status"
+  >
     <span class="sr-only">Loading...</span>
   </div>
 </ng-template>
